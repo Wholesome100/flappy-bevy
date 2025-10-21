@@ -40,13 +40,15 @@ fn spawn_bird(
 fn flap_bird(
     time: Res<Time>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    mut birds: Query<&mut LinearVelocity, With<Controllable>>,
+    mut birds: Query<(&mut LinearVelocity, &mut AngularVelocity), With<Controllable>>,
 ) {
     let delta_time = time.delta_secs_f64().adjust_precision();
 
-    for mut linear_velocity in &mut birds {
+    for (mut linear_velocity, mut angular_velocity) in &mut birds {
         if keyboard_input.just_pressed(KeyCode::Space) {
             linear_velocity.y = 1500.0 * delta_time;
+            angular_velocity.0 = 50.0 * delta_time;
+
             println!("Flap!")
         }
     }
