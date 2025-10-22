@@ -10,7 +10,7 @@ fn main() {
             PhysicsPlugins::default().with_length_unit(0.25),
         ))
         .add_systems(Startup, (spawn_bird, setup_camera))
-        .add_systems(Update, flap_bird)
+        .add_systems(FixedUpdate, flap_bird)
         .run();
 }
 
@@ -24,20 +24,22 @@ fn spawn_bird(
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
     // It's better to declare all meshes and materials as separate variables to make the commands.spawn cleaner
-    let bird_shape = Rectangle::new(5.0, 5.0);
+    let bird_shape = Capsule2d::new(3.0, 5.0);
     let bird_color = ColorMaterial::from_color(GREEN_600);
+    let bird_orient = Quat::from_rotation_z(90.0 * (PI / 180.0));
 
     commands.spawn((
         Mesh2d(meshes.add(bird_shape)),
         MeshMaterial2d(materials.add(bird_color)),
         RigidBody::Dynamic,
         Collider::from(bird_shape),
+        Transform::from_rotation(bird_orient),
         GravityScale(2.0),
         Controllable,
     ));
 }
 
-/// Update method to let the bird "flap" on every spacebar press
+/// FixedUpdate method to let the bird "flap" on every spacebar press
 fn flap_bird(
     time: Res<Time>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
