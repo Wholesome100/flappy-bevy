@@ -10,7 +10,7 @@ fn main() {
             PhysicsPlugins::default().with_length_unit(0.25),
         ))
         .add_systems(Startup, (spawn_bird, setup_camera))
-        .add_systems(FixedUpdate, flap_bird)
+        .add_systems(Update, flap_bird)
         .run();
 }
 
@@ -39,7 +39,7 @@ fn spawn_bird(
     ));
 }
 
-/// FixedUpdate method to let the bird "flap" on every spacebar press
+/// Update method to let the bird "flap" on every spacebar press
 fn flap_bird(
     time: Res<Time>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
