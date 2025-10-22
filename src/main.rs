@@ -1,7 +1,7 @@
 // To build in debug with dynamic linking, run:
 // cargo run --features bevy/dynamic_linking
 use avian2d::{math::*, prelude::*};
-use bevy::{color::palettes::tailwind::GREEN_600, prelude::*};
+use bevy::{camera::ScalingMode, color::palettes::tailwind::GREEN_600, prelude::*};
 
 fn main() {
     App::new()
@@ -32,6 +32,7 @@ fn spawn_bird(
         MeshMaterial2d(materials.add(bird_color)),
         RigidBody::Dynamic,
         Collider::from(bird_shape),
+        GravityScale(2.0),
         Controllable,
     ));
 }
@@ -59,6 +60,7 @@ fn setup_camera(mut commands: Commands) {
     commands.spawn((
         Camera2d,
         Projection::Orthographic(OrthographicProjection {
+            scaling_mode: ScalingMode::WindowSize,
             scale: 0.04,
             ..OrthographicProjection::default_2d()
         }),
