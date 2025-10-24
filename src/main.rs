@@ -1,8 +1,13 @@
 // To build in debug with dynamic linking, run:
 // cargo run --features bevy/dynamic_linking
 use avian2d::{math::*, prelude::*};
-use bevy::{camera::ScalingMode, color::palettes::tailwind::GREEN_600, prelude::*};
+use bevy::{
+    camera::ScalingMode,
+    color::palettes::tailwind::{GREEN_600, RED_800},
+    prelude::*,
+};
 
+// Beyond setup, wider collision functions and UI will happen in main
 fn main() {
     App::new()
         .add_plugins((
@@ -37,6 +42,17 @@ fn spawn_bird(
         GravityScale(2.0),
         Controllable,
     ));
+
+    let border_shape = Rectangle::new(100.0, 10.0);
+    let border_color = ColorMaterial::from_color(RED_800);
+    // Quick code to test an obstacle entity
+    commands.spawn((
+        Mesh2d(meshes.add(border_shape)),
+        MeshMaterial2d(materials.add(border_color)),
+        RigidBody::Kinematic,
+        Collider::from(border_shape),
+        Transform::from_xyz(0., -20.0, 0.),
+    ));
 }
 
 /// Update method to let the bird "flap" on every spacebar press
@@ -50,6 +66,7 @@ fn flap_bird(
     for (mut linear_velocity, mut angular_velocity) in &mut birds {
         if keyboard_input.just_pressed(KeyCode::Space) {
             linear_velocity.y = 1500.0 * delta_time;
+            linear_velocity.x = 0.0;
             angular_velocity.0 = 50.0 * delta_time;
 
             println!("Flap!")
@@ -63,7 +80,7 @@ fn setup_camera(mut commands: Commands) {
         Camera2d,
         Projection::Orthographic(OrthographicProjection {
             scaling_mode: ScalingMode::WindowSize,
-            scale: 0.04,
+            scale: 0.10,
             ..OrthographicProjection::default_2d()
         }),
     ));
