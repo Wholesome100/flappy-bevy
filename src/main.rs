@@ -48,10 +48,18 @@ fn spawn_bird(
     // Quick code to test an obstacle entity
     commands.spawn((
         Mesh2d(meshes.add(border_shape)),
-        MeshMaterial2d(materials.add(border_color)),
-        RigidBody::Kinematic,
+        MeshMaterial2d(materials.add(border_color.clone())),
+        RigidBody::Static,
         Collider::from(border_shape),
         Transform::from_xyz(0., -20.0, 0.),
+    ));
+
+    commands.spawn((
+        Mesh2d(meshes.add(border_shape)),
+        MeshMaterial2d(materials.add(border_color)),
+        RigidBody::Static,
+        Collider::from(border_shape),
+        Transform::from_xyz(0., 20.0, 0.),
     ));
 }
 
@@ -64,9 +72,13 @@ fn flap_bird(
     let delta_time = time.delta_secs_f64().adjust_precision();
 
     for (mut linear_velocity, mut angular_velocity) in &mut birds {
+        // Keep the linear velocity at 0.0 to keep the bird in one spot
+        linear_velocity.x = 0.0;
+
+        // Apply upwards linear velocity and angular velocity on spacebar press
         if keyboard_input.just_pressed(KeyCode::Space) {
             linear_velocity.y = 1500.0 * delta_time;
-            linear_velocity.x = 0.0;
+
             angular_velocity.0 = 50.0 * delta_time;
 
             println!("Flap!")
