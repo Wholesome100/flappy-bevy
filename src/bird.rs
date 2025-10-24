@@ -1,8 +1,5 @@
 use avian2d::{math::*, prelude::*};
-use bevy::{
-    color::palettes::tailwind::{GREEN_600, RED_800},
-    prelude::*,
-};
+use bevy::{color::palettes::tailwind::GREEN_600, prelude::*};
 
 /// Plugin for the player character controller
 pub struct BirdPlugin;
@@ -36,25 +33,6 @@ fn spawn_bird(
         Transform::from_rotation(bird_orient),
         GravityScale(2.0),
         Controllable,
-    ));
-
-    let border_shape = Rectangle::new(100.0, 10.0);
-    let border_color = ColorMaterial::from_color(RED_800);
-    // Quick code to test an obstacle entity
-    commands.spawn((
-        Mesh2d(meshes.add(border_shape)),
-        MeshMaterial2d(materials.add(border_color.clone())),
-        RigidBody::Static,
-        Collider::from(border_shape),
-        Transform::from_xyz(0., -20.0, 0.),
-    ));
-
-    commands.spawn((
-        Mesh2d(meshes.add(border_shape)),
-        MeshMaterial2d(materials.add(border_color)),
-        RigidBody::Static,
-        Collider::from(border_shape),
-        Transform::from_xyz(0., 20.0, 0.),
     ));
 }
 

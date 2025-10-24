@@ -4,6 +4,7 @@ use avian2d::prelude::*;
 use bevy::{camera::ScalingMode, prelude::*};
 
 mod bird;
+mod stage;
 
 // Beyond setup, wider collision functions and UI will happen in main
 fn main() {
@@ -11,6 +12,7 @@ fn main() {
         .add_plugins((
             DefaultPlugins,
             PhysicsPlugins::default().with_length_unit(0.25),
+            stage::StagePlugin,
             bird::BirdPlugin,
         ))
         .add_systems(Startup, setup_camera)
