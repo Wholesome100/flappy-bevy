@@ -1,8 +1,5 @@
 use avian2d::prelude::*;
-use bevy::{
-    color::palettes::tailwind::RED_800,
-    prelude::*,
-};
+use bevy::{color::palettes::tailwind::RED_800, prelude::*};
 
 /// Plugin for the obstacles the player will interact with, including ground/sky
 pub struct StagePlugin;
@@ -19,8 +16,8 @@ struct Deadly;
 fn spawn_borders(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<ColorMaterial>>,)
-{
+    mut materials: ResMut<Assets<ColorMaterial>>,
+) {
     let border_shape = Rectangle::new(150.0, 10.0);
     let border_color = ColorMaterial::from_color(RED_800);
 
@@ -40,6 +37,6 @@ fn spawn_borders(
         RigidBody::Static,
         Collider::from(border_shape),
         Transform::from_xyz(0., 41.0, 0.),
-        Deadly
+        Deadly,
     ));
 }

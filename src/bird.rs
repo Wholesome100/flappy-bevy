@@ -25,7 +25,7 @@ fn spawn_bird(
     let bird_color = ColorMaterial::from_color(GREEN_600);
 
     let bird_orient = Quat::from_rotation_z(90.0 * (PI / 180.0));
-    let bird_position = Vec3::from_array([-26., 0., 0.]);
+    let bird_position = Vec3::new(-26., 0., 0.);
 
     let bird_matrix = Mat4::from_rotation_translation(bird_orient, bird_position);
 
@@ -33,32 +33,32 @@ fn spawn_bird(
         Mesh2d(meshes.add(bird_shape)),
         MeshMaterial2d(materials.add(bird_color)),
         RigidBody::Dynamic,
+        MaxLinearSpeed(20.0),
+        AngularDamping(10.0),
         Collider::from(bird_shape),
         Transform::from_matrix(bird_matrix),
-        GravityScale(2.0),
+        GravityScale(2.5),
         Controllable,
     ));
 }
 
 /// Update method to let the bird "flap" on every spacebar press
 fn flap_bird(
-    time: Res<Time>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    mut birds: Query<(&mut LinearVelocity, &mut AngularVelocity), With<Controllable>>,
+    mut birds: Query<Forces, With<Controllable>>,
 ) {
-    let delta_time = time.delta_secs_f64().adjust_precision();
-
-    for (mut linear_velocity, mut angular_velocity) in &mut birds {
-        // Keep the linear velocity at 0.0 to keep the bird in one spot
-        linear_velocity.x = 0.0;
-
-        // Apply upwards linear velocity and angular velocity on spacebar press
+    for mut forces in &mut birds {
+        // Apply upwards linear impulse on spacebar press
         if keyboard_input.just_pressed(KeyCode::Space) {
-            linear_velocity.y = 1500.0 * delta_time;
-
-            angular_velocity.0 = 50.0 * delta_time;
+            forces.apply_linear_impulse(Vec2::new(0.0, 1000.0));
+            forces.apply_angular_impulse(1000.0);
 
             println!("Flap!")
         }
+        // We set forces after the impulse due to borrowing
+        let bird_force = forces.linear_velocity_mut();
+        bird_force.x = 0.0;
+
+        forces.apply_angular_impulse(-5.0);
     }
 }

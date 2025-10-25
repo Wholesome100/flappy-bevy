@@ -24,7 +24,10 @@ fn setup_camera(mut commands: Commands) {
     commands.spawn((
         Camera2d,
         Projection::Orthographic(OrthographicProjection {
-            scaling_mode: ScalingMode::Fixed { width: 1080., height: 720. },
+            scaling_mode: ScalingMode::Fixed {
+                width: 1080.,
+                height: 720.,
+            },
             scale: 0.10,
             ..OrthographicProjection::default_2d()
         }),
