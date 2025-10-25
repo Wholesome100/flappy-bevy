@@ -48,17 +48,29 @@ fn flap_bird(
     mut birds: Query<Forces, With<Controllable>>,
 ) {
     for mut forces in &mut birds {
+        // Debgugging line to see rotation of bird
+        // println!("{:?}", forces.rotation().as_degrees());
+
         // Apply upwards linear impulse on spacebar press
         if keyboard_input.just_pressed(KeyCode::Space) {
             forces.apply_linear_impulse(Vec2::new(0.0, 1000.0));
-            forces.apply_angular_impulse(1000.0);
 
-            println!("Flap!")
+            // Apply angular impulse only when under 120.0 degrees to stop spinning out
+            if forces.rotation().as_degrees() < 120.0 {
+                //println!("Applying positive impulse");
+                forces.apply_angular_impulse(1000.0);
+            }
+
+            //println!("Flap!")
         }
+
+        // Apply negative angular impulse only while we're above 20.0 degrees
+        if forces.rotation().as_degrees() > 20.0 {
+            forces.apply_angular_impulse(-5.0);
+        }
+
         // We set forces after the impulse due to borrowing
         let bird_force = forces.linear_velocity_mut();
         bird_force.x = 0.0;
-
-        forces.apply_angular_impulse(-5.0);
     }
 }
