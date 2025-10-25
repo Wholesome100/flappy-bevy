@@ -21,16 +21,20 @@ fn spawn_bird(
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
     // It's better to declare all meshes and materials as separate variables to make the commands.spawn cleaner
-    let bird_shape = Capsule2d::new(3.0, 5.0);
+    let bird_shape = Capsule2d::new(2.0, 2.0);
     let bird_color = ColorMaterial::from_color(GREEN_600);
+
     let bird_orient = Quat::from_rotation_z(90.0 * (PI / 180.0));
+    let bird_position = Vec3::from_array([-26., 0., 0.]);
+
+    let bird_matrix = Mat4::from_rotation_translation(bird_orient, bird_position);
 
     commands.spawn((
         Mesh2d(meshes.add(bird_shape)),
         MeshMaterial2d(materials.add(bird_color)),
         RigidBody::Dynamic,
         Collider::from(bird_shape),
-        Transform::from_rotation(bird_orient),
+        Transform::from_matrix(bird_matrix),
         GravityScale(2.0),
         Controllable,
     ));

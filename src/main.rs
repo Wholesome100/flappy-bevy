@@ -4,7 +4,7 @@ use avian2d::prelude::*;
 use bevy::{camera::ScalingMode, prelude::*};
 
 mod bird;
-mod stage;
+mod obstacles;
 
 // Beyond setup, wider collision functions and UI will happen in main
 fn main() {
@@ -12,7 +12,7 @@ fn main() {
         .add_plugins((
             DefaultPlugins,
             PhysicsPlugins::default().with_length_unit(0.25),
-            stage::StagePlugin,
+            obstacles::StagePlugin,
             bird::BirdPlugin,
         ))
         .add_systems(Startup, setup_camera)
@@ -24,7 +24,7 @@ fn setup_camera(mut commands: Commands) {
     commands.spawn((
         Camera2d,
         Projection::Orthographic(OrthographicProjection {
-            scaling_mode: ScalingMode::WindowSize,
+            scaling_mode: ScalingMode::Fixed { width: 1080., height: 720. },
             scale: 0.10,
             ..OrthographicProjection::default_2d()
         }),
