@@ -11,7 +11,7 @@ impl Plugin for StagePlugin {
 }
 
 #[derive(Component)]
-struct Deadly;
+pub struct Deadly;
 
 fn spawn_borders(
     mut commands: Commands,
@@ -28,6 +28,7 @@ fn spawn_borders(
         RigidBody::Static,
         Collider::from(border_shape),
         Transform::from_xyz(0., -32.0, 0.),
+        Deadly,
     ));
 
     // Entity block for the sky
@@ -37,6 +38,5 @@ fn spawn_borders(
         RigidBody::Static,
         Collider::from(border_shape),
         Transform::from_xyz(0., 41.0, 0.),
-        Deadly,
     ));
 }

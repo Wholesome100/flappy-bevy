@@ -1,6 +1,9 @@
 use avian2d::{math::*, prelude::*};
 use bevy::{color::palettes::tailwind::GREEN_600, prelude::*};
 
+// Needed to check if any colliding entities are Deadly
+use crate::obstacles::Deadly;
+
 /// Plugin for the player character controller
 pub struct BirdPlugin;
 
@@ -35,11 +38,12 @@ fn spawn_bird(
         RigidBody::Dynamic,
         MaxLinearSpeed(20.0),
         AngularDamping(10.0),
-        Collider::from(bird_shape),
-        Transform::from_matrix(bird_matrix),
         GravityScale(2.5),
+        Collider::from(bird_shape),
+        CollisionEventsEnabled,
+        Transform::from_matrix(bird_matrix),
         Controllable,
-    ));
+    )).observe(on_deadly_contact);
 }
 
 /// Update method to let the bird "flap" on every spacebar press
@@ -72,5 +76,14 @@ fn flap_bird(
         // We set forces after the impulse due to borrowing
         let bird_force = forces.linear_velocity_mut();
         bird_force.x = 0.0;
+    }
+}
+
+fn on_deadly_contact(event: On<CollisionStart>, deadly_query: Query<&Deadly>) {
+    let bird = event.collider1;
+    let obstacle = event.collider2;
+
+    if deadly_query.contains(obstacle) {
+        println!("The {bird} is dead.")
     }
 }
