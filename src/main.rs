@@ -28,7 +28,7 @@ fn setup_camera(mut commands: Commands) {
                 width: 1080.,
                 height: 720.,
             },
-            scale: 0.10,
+            scale: 0.20,
             ..OrthographicProjection::default_2d()
         }),
     ));

@@ -32,18 +32,20 @@ fn spawn_bird(
 
     let bird_matrix = Mat4::from_rotation_translation(bird_orient, bird_position);
 
-    commands.spawn((
-        Mesh2d(meshes.add(bird_shape)),
-        MeshMaterial2d(materials.add(bird_color)),
-        RigidBody::Dynamic,
-        MaxLinearSpeed(20.0),
-        AngularDamping(10.0),
-        GravityScale(2.5),
-        Collider::from(bird_shape),
-        CollisionEventsEnabled,
-        Transform::from_matrix(bird_matrix),
-        Controllable,
-    )).observe(on_deadly_contact);
+    commands
+        .spawn((
+            Mesh2d(meshes.add(bird_shape)),
+            MeshMaterial2d(materials.add(bird_color)),
+            RigidBody::Dynamic,
+            MaxLinearSpeed(20.0),
+            AngularDamping(10.0),
+            GravityScale(2.5),
+            Collider::from(bird_shape),
+            CollisionEventsEnabled,
+            Transform::from_matrix(bird_matrix),
+            Controllable,
+        ))
+        .observe(on_deadly_contact);
 }
 
 /// Update method to let the bird "flap" on every spacebar press
