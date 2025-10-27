@@ -25,7 +25,7 @@ fn spawn_borders(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
-    let border_shape = Rectangle::new(150.0, 10.0);
+    let border_shape = Rectangle::new(200.0, 10.0);
     let border_color = ColorMaterial::from_color(RED_800);
 
     // Entity block for the ground
@@ -34,7 +34,7 @@ fn spawn_borders(
         MeshMaterial2d(materials.add(border_color.clone())),
         RigidBody::Static,
         Collider::from(border_shape),
-        Transform::from_xyz(0., -32.0, 0.),
+        Transform::from_xyz(0., -45., 0.),
         Deadly,
     ));
 
@@ -44,7 +44,7 @@ fn spawn_borders(
         MeshMaterial2d(materials.add(border_color)),
         RigidBody::Static,
         Collider::from(border_shape),
-        Transform::from_xyz(0., 41.0, 0.),
+        Transform::from_xyz(0., 55., 0.),
     ));
 }
 
@@ -53,8 +53,8 @@ fn spawn_pipes(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
-    // NOTE: Maximum pipe height can be 63.0
-    let pipe_shape = Rectangle::new(10., 63.);
+    // y_min is -40, ymax is 50
+    let pipe_shape = Rectangle::new(10., 100.);
     let pipe_color = ColorMaterial::from_color(PURPLE_400);
 
     commands.spawn((
@@ -62,7 +62,7 @@ fn spawn_pipes(
         MeshMaterial2d(materials.add(pipe_color)),
         RigidBody::Kinematic,
         Collider::from(pipe_shape),
-        Transform::from_xyz(0., 4.5, 0.),
+        Transform::from_xyz(0., 0., 0.),
         Moving,
         Deadly,
     ));
