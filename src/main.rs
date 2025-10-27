@@ -12,7 +12,7 @@ fn main() {
         .add_plugins((
             DefaultPlugins,
             PhysicsPlugins::default().with_length_unit(0.25),
-            obstacles::StagePlugin,
+            obstacles::ObstaclePlugin,
             bird::BirdPlugin,
         ))
         .add_systems(Startup, setup_camera)

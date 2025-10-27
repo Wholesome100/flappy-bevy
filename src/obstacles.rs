@@ -5,9 +5,9 @@ use bevy::{
 };
 
 /// Plugin for the obstacles the player will interact with, including ground/sky
-pub struct StagePlugin;
+pub struct ObstaclePlugin;
 
-impl Plugin for StagePlugin {
+impl Plugin for ObstaclePlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, (spawn_borders, spawn_pipes));
         app.add_systems(FixedUpdate, move_pipes);
