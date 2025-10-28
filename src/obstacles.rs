@@ -4,6 +4,8 @@ use bevy::{
     prelude::*,
 };
 
+use crate::bird::Controllable;
+
 /// Plugin for the obstacles the player will interact with, including ground/sky
 pub struct ObstaclePlugin;
 
@@ -64,13 +66,24 @@ fn spawn_pipes(
         Collider::from(pipe_shape),
         Transform::from_xyz(0., 0., 0.),
         Moving,
-        Deadly,
-    ));
+        Sensor,
+        CollisionEventsEnabled
+        //Deadly,
+    )).observe(award_point);
 }
 
 fn move_pipes(mut query: Query<&mut LinearVelocity, With<Moving>>, time: Res<Time>) {
     let delta_secs = time.delta_secs();
     for mut linear_velocity in &mut query {
         linear_velocity.x = -700.0 * delta_secs;
+    }
+}
+
+fn award_point(event: On<CollisionEnd>, bird_query: Query<&Controllable>){
+    let sensor = event.collider1;
+    let bird = event.collider2;
+
+    if bird_query.contains(bird){
+        println!("{bird} passed through {sensor}, +1 Points")
     }
 }

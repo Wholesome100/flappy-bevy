@@ -15,7 +15,7 @@ impl Plugin for BirdPlugin {
 }
 
 #[derive(Component)]
-struct Controllable;
+pub struct Controllable;
 
 /// Startup method to spawn the bird (player character)
 fn spawn_bird(
