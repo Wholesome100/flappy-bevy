@@ -1,1 +1,1 @@
-// Plugin file for a parallax scrolling background
+// Future plugin file for a parallax scrolling background
