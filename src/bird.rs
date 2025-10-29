@@ -61,8 +61,8 @@ fn flap_bird(
         if keyboard_input.just_pressed(KeyCode::Space) {
             forces.apply_linear_impulse(Vec2::new(0.0, 1000.0));
 
-            // Apply angular impulse only when under 120.0 degrees to stop spinning out
-            if forces.rotation().as_degrees() < 120.0 {
+            // Apply angular impulse only when under 100.0 degrees to stop spinning out
+            if forces.rotation().as_degrees() < 100.0 {
                 //println!("Applying positive impulse");
                 forces.apply_angular_impulse(1000.0);
             }
