@@ -16,7 +16,7 @@ impl Plugin for ObstaclePlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(PipeTimer(Timer::from_seconds(1.0, TimerMode::Repeating)))
             .add_systems(Startup, spawn_borders)
-            .add_systems(FixedUpdate, (spawn_pipes, move_pipes).chain());
+            .add_systems(FixedUpdate, (spawn_pipes, move_pipes, despawn_pipes).chain());
     }
 }
 
@@ -120,6 +120,20 @@ fn move_pipes(mut query: Query<&mut LinearVelocity, With<Moving>>, time: Res<Tim
 
     for mut linear_velocity in &mut query {
         linear_velocity.x = PIPE_SPEED * delta_secs;
+    }
+}
+
+fn despawn_pipes(
+    mut commands:Commands,
+    query: Query<(Entity, &Transform), With<Moving>>,
+){
+    const OFFSCREEN_X_DELETE: f32 = -200.0;
+
+    for (entity, transform) in query.iter() {
+        if transform.translation.x < OFFSCREEN_X_DELETE {
+            commands.entity(entity).despawn();
+            //println!("Pipe deleted.")
+        }
     }
 }
 
