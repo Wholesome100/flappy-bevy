@@ -72,7 +72,7 @@ fn flap_bird(
 
         // Apply negative angular impulse only while we're above 20.0 degrees
         if forces.rotation().as_degrees() > 20.0 {
-            forces.apply_angular_impulse(-5.0);
+            forces.apply_angular_impulse(-3.0);
         }
 
         // We set forces after the impulse due to borrowing
