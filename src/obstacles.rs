@@ -7,7 +7,11 @@ use bevy::{
 };
 use rand::Rng;
 
+use crate::GameState;
 use crate::bird::Controllable;
+
+use crate::Score;
+use crate::ScoreText;
 
 /// Plugin for the obstacles the player will interact with, including ground/sky
 pub struct ObstaclePlugin;
@@ -18,7 +22,9 @@ impl Plugin for ObstaclePlugin {
             .add_systems(Startup, spawn_borders)
             .add_systems(
                 FixedUpdate,
-                (spawn_pipes, move_pipes, despawn_pipes).chain(),
+                (spawn_pipes, move_pipes, update_points, despawn_pipes)
+                    .chain()
+                    .run_if(in_state(GameState::Playing)),
             );
     }
 }
@@ -155,11 +161,23 @@ fn despawn_pipes(mut commands: Commands, query: Query<(Entity, &Transform), With
     }
 }
 
-fn award_point(event: On<CollisionEnd>, bird_query: Query<&Controllable>) {
+fn award_point(
+    event: On<CollisionEnd>,
+    bird_query: Query<&Controllable>,
+    mut score: ResMut<Score>,
+) {
     let _sensor = event.collider1;
     let bird = event.collider2;
 
     if bird_query.contains(bird) {
         //println!("{bird} passed through {sensor}, +1 Points")
+        score.0 += 1;
+    }
+}
+
+fn update_points(score: Res<Score>, mut query: Query<&mut Text, With<ScoreText>>) {
+    if score.is_changed() {
+        let text = query.single_mut();
+        text.unwrap().0 = format!("{}", score.0);
     }
 }

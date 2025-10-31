@@ -4,13 +4,15 @@ use bevy::{color::palettes::tailwind::GREEN_600, prelude::*};
 // Needed to check if any colliding entities are Deadly
 use crate::obstacles::Deadly;
 
+use crate::GameState;
+
 /// Plugin for the player character controller
 pub struct BirdPlugin;
 
 impl Plugin for BirdPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, spawn_bird);
-        app.add_systems(Update, flap_bird);
+        app.add_systems(Update, flap_bird.run_if(in_state(GameState::Playing)));
     }
 }
 
@@ -81,11 +83,16 @@ fn flap_bird(
     }
 }
 
-fn on_deadly_contact(event: On<CollisionStart>, deadly_query: Query<&Deadly>) {
-    let bird = event.collider1;
+fn on_deadly_contact(
+    event: On<CollisionStart>,
+    deadly_query: Query<&Deadly>,
+    mut game_state: ResMut<NextState<GameState>>,
+) {
+    let _bird = event.collider1;
     let obstacle = event.collider2;
 
     if deadly_query.contains(obstacle) {
-        println!("The {bird} is dead.")
+        //println!("The {bird} is dead.")
+        game_state.set(GameState::GameOver);
     }
 }
