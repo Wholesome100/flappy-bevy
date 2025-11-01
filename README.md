@@ -6,7 +6,7 @@ that allows for innate multithreading. While the engine is young, I wanted to ge
 ## Overview
 
 Flappy Bevy is a clone in the vein of the original Flappy Bird. You control a "bird" and are attempting to fly through gaps in various "pipes" to earn points. The game ends
-when the bird collides with a pipe. The assets for the game are all basic engine shapes, as the programming side of this project was the main focus.
+when the bird collides with a pipe. The assets for the game are all basic engine shapes, as the programming side of this project was the main focus. The project utilizes the Avian2D library to handle the game physics and collision events.
 
 ## Takeaways
 
